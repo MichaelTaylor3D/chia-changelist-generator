@@ -20,9 +20,12 @@ const decodeHex = (str = "") => {
   return Buffer.from(str.replace("0x", ""), "hex").toString("utf8");
 };
 
-const isValidHexadecimal = (value) => {
+const isValidHexadecimal = (value) => {  
+  if (value?.startsWith("0x")) {
+    value = value.slice(2);
+  }
   const hexRegex = /^[0-9a-fA-F]+$/;
-  return hexRegex.test(value);
+  return hexRegex.test(value?.trim());
 };
 
 const generateChange = async (storeId, action, key, value) => {
@@ -30,9 +33,9 @@ const generateChange = async (storeId, action, key, value) => {
     throw new Error(`Key ${key} is not a valid hexadecimal string`);
   }
 
-  if (!isValidHexadecimal(value)) {
+  if (action == 'insert' && !isValidHexadecimal(value)) {
     throw new Error(
-      `Value for ${decodeHex(key)} is not a valid hexadecimal string`
+      `Value for ${key} is not a valid hexadecimal string`
     );
   }
 
@@ -50,11 +53,16 @@ const generateChange = async (storeId, action, key, value) => {
 const generateInsertChange = (existingKeys, key, value) => {
   const change = [];
 
-  if (existingKeys.includes(`0x${key}`)) {
+  const hexKey = key.startsWith("0x") ? key : "0x" + key;
+
+  if (existingKeys.includes(hexKey)) {
+    console.log(`UPDATE: Key ${decodeHex(key)}`);
     change.push({
       action: "delete",
       key: key,
     });
+  } else {
+    console.log(`INSERT: Key ${decodeHex(key)}`);
   }
 
   change.push({
@@ -69,11 +77,20 @@ const generateInsertChange = (existingKeys, key, value) => {
 const generateDeleteChange = async (existingKeys, key) => {
   const change = [];
 
-  if (existingKeys.includes(`0x${key}`)) {
+  const hexKey = key.startsWith("0x") ? key : "0x" + key;
+
+  if (existingKeys.includes(hexKey)) {
+    console.log(
+      `DELETE: Key ${decodeHex(key)} exists in store adding to change list`
+    );
     change.push({
       action: "delete",
       key: key,
     });
+  } else {
+    console.warn(
+      `Key ${decodeHex(key)} does not exist in store not adding to change list`
+    );
   }
 
   return change;
