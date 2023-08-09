@@ -1,0 +1,26 @@
+{
+  "name": "chia-changelist-generator",
+  "version": "1.0.0",
+  "description": "Easily Generate a ChangeList for Chia DataLayer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MichaelTaylor3D/chia-changelist-generator.git"
+  },
+  "keywords": [
+    "chia-blockchain"
+  ],
+  "author": "Michael Taylor",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MichaelTaylor3D/chia-changelist-generator/issues"
+  },
+  "homepage": "https://github.com/MichaelTaylor3D/chia-changelist-generator#readme",
+  "dependencies": {
+    "chia-changelist-chunks": "^1.0.12",
+    "chia-datalayer": "^1.0.0"
+  }
+}
