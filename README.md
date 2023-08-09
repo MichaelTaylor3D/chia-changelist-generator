@@ -4,17 +4,15 @@ This README offers an overview and usage guidelines for the `chia-changelist-gen
 
 ## Overview
 
-The `chia-changelist-generator` module introduces utility functions to collaborate with the Chia DataLayer, specifically aiming to produce changesets founded on hexadecimal keys and values. Moreover, it incorporates the `chia-changelist-chunks` tool to segment the change list depending on the configuration.
+The `chia-changelist-generator` module provides utility functions to work with the Chia DataLayer, specifically aiming to produce changesets based on hexadecimal keys and values. Moreover, it incorporates the `chia-changelist-chunks` module to optionally segment the change list depending on the configuration.
 
 ## Prerequisites
 
-- **Chia Wallet**: This tool hinges on the Chia Wallet to ensure there aren't any lingering transactions before probing the DataLayer. This step is essential for working with the latest available data.
-
-- **Chia DataLayer**: The DataLayer must be active, given the utility examines if specific keys already exist, subsequently determining the fitting change operation for the change list.
+- **Chia DataLayer**: The utility primarily interfaces with the Chia DataLayer. It checks for existing keys, determining the appropriate change operation (insert or delete) for the change list.
 
 ## Default Configuration
 
-The utility is pre-loaded with a built-in configuration as follows:
+The utility comes pre-loaded with a default configuration:
 
 ```javascript
 {
@@ -24,19 +22,19 @@ The utility is pre-loaded with a built-in configuration as follows:
 }
 ```
 
-You can effortlessly supersede this default setup through the `configure` method.
+You can override this configuration using the `configure` method.
 
 ## Features
 
-1. **Configuration Update**: Enables on-the-fly adjustments of the DataLayer RPC and changeListChunker with fresh configurations.
-2. **Hexadecimal Validation**: Authenticates if a particular string is a valid hexadecimal.
-3. **Hexadecimal Encoding & Decoding**: Renders methods to encode/decode strings to/from hexadecimal.
-4. **Change Generation**: Constructs change tasks (like insertions or deletions) based on delivered inputs.
-5. **Batch Changes with Chunking**: Handles numerous key-value pairs to generate a detailed list of modifications. It also offers an option to segment the change list.
+1. **Configuration Update**: Allows you to update the DataLayer RPC and `changeListChunker` configurations dynamically.
+2. **Hexadecimal Validation**: Checks if a string is a valid hexadecimal.
+3. **Hexadecimal Encoding & Decoding**: Provides methods to encode/decode strings to/from hexadecimal.
+4. **Change Generation**: Creates change operations (either insert or delete) based on the input.
+5. **Batch Changes with Chunking**: Processes multiple key-value pairs to generate a comprehensive list of modifications. It also offers the option to segment the change list based on size constraints.
 
 ## Getting Started
 
-Make sure to have the `chia-changelist-generator` package:
+Ensure you've installed the `chia-changelist-generator` package:
 
 ```bash
 npm install chia-changelist-generator
@@ -45,7 +43,7 @@ npm install chia-changelist-generator
 ### Usage
 
 **1. Configuration**:
-Although initialized with the aforementioned default setup, you can modify it:
+Although initialized with a default configuration, you can easily modify it:
 
 ```javascript
 const changeListGenerator = require('chia-changelist-generator');
@@ -53,22 +51,30 @@ changeListGenerator.configure(yourCustomConfig);
 ```
 
 **2. Generate Changes**:
-To compute changes for a store from several key-value pairs:
+To compute changes for a store using multiple key-value pairs and a specified action (either 'insert' or 'delete'):
 
 ```javascript
-const changes = await changeListGenerator.generateChangeList(storeId, [{key: 'key1', value: 'value1'}, {key: 'key2', value: 'value2'}], { chunkChangeList: true });
+const changes = await changeListGenerator.generateChangeList(storeId, 'insert', [{key: 'key1', value: 'value1'}, {key: 'key2', value: 'value2'}], { chunkChangeList: true });
 ```
 
-This function precisely calculates the changes and can, if directed in the options, chunk the changes into several changelist if the maximum size of the changelist exceed the RPC size limits.
+This function calculates the necessary changes and, if specified in the options, chunks the changes into multiple changelists if they exceed the RPC size limits.
 
 ### Utility Functions
 
-- **encodeHex(str)**: Transforms a conventional string to its hexadecimal variant.
+- **encodeHex(str)**: Transforms a string into its hexadecimal representation.
   
-- **decodeHex(str)**: Converts a hex string (with an optional "0x" prefix) to its UTF8 version.
+- **decodeHex(str)**: Converts a hex string (with or without a "0x" prefix) into its UTF8 string representation.
   
-- **isValidHexadecimal(value)**: Validates if a given string corresponds to a legit hexadecimal.
+- **isValidHexadecimal(value)**: Determines if the provided string is a valid hexadecimal.
 
 ### Error Handling
 
-In cases where the key or value diverges from a valid hexadecimal string format, the module will react by raising an error. Always integrate robust error-handling strategies when interfacing with these functions.
+The module will throw an error if provided keys or values are not in valid hexadecimal string format, or if an unsupported action is passed to the change generator. Always ensure proper error handling when utilizing these functions.
+
+## Support the Project
+
+If you found this tool helpful, consider donating to support the development of more Chia Datalayer Tools.
+
+**Donation address:** `xch1es9faez5evlvdyfjdjth40fazfm3c9gptds0reuhryf30y3kl67qtcsc83`
+
+Your support is greatly appreciated!
