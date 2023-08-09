@@ -1,5 +1,6 @@
 const Datalayer = require("chia-datalayer");
 const changeListChunker = require("chia-changelist-chunks");
+const defaultConfig = require("./defaultConfig");
 
 let config = defaultConfig;
 let datalayer = Datalayer.rpc(config);
@@ -38,18 +39,18 @@ const generateChange = async (storeId, action, key, value) => {
   const existingKeys = await datalayer.getKeys({ id: storeId });
 
   if (action === "insert") {
-    return await generateInsertChange(storeId, existingKeys, key, value);
+    return generateInsertChange(existingKeys?.keys || [], key, value);
   } else if (action === "delete") {
-    return await generateDeleteChange(storeId, existingKeys, key);
+    return generateDeleteChange(existingKeys?.keys || [], key);
   } else {
     throw new Error(`Action ${action} is not supported`);
   }
 };
 
-const generateInsertChange = async (existingKeys, key, value) => {
+const generateInsertChange = (existingKeys, key, value) => {
   const change = [];
 
-  if (existingKeys.includes(key)) {
+  if (existingKeys.includes(`0x${key}`)) {
     change.push({
       action: "delete",
       key: key,
@@ -68,7 +69,7 @@ const generateInsertChange = async (existingKeys, key, value) => {
 const generateDeleteChange = async (key) => {
   const change = [];
 
-  if (existingKeys.includes(key)) {
+  if (existingKeys.includes(`0x${key}`)) {
     change.push({
       action: "delete",
       key: key,
@@ -97,7 +98,7 @@ const generateChangeList = async (
   }
 
   if (options.chunkChangeList) {
-    changeList = changeListChunker.chunkChangeList(changeList);
+    changeList = changeListChunker.chunkChangeList(storeId, changeList);
   }
   return changeList;
 };
