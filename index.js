@@ -66,7 +66,7 @@ const generateInsertChange = (existingKeys, key, value) => {
   return change;
 };
 
-const generateDeleteChange = async (key) => {
+const generateDeleteChange = async (existingKeys, key) => {
   const change = [];
 
   if (existingKeys.includes(`0x${key}`)) {

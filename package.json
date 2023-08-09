@@ -1,6 +1,6 @@
 {
   "name": "chia-changelist-generator",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Easily Generate a ChangeList for Chia DataLayer",
   "main": "index.js",
   "scripts": {
