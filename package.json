@@ -1,6 +1,6 @@
 {
   "name": "chia-changelist-generator",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Easily Generate a ChangeList for Chia DataLayer",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,6 @@
   "homepage": "https://github.com/MichaelTaylor3D/chia-changelist-generator#readme",
   "dependencies": {
     "chia-changelist-chunks": "^1.0.12",
-    "chia-datalayer": "^1.0.0"
+    "chia-datalayer": "^2.0.0"
   }
 }

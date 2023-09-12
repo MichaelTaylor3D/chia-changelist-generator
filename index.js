@@ -3,12 +3,12 @@ const changeListChunker = require("chia-changelist-chunks");
 const defaultConfig = require("./defaultConfig");
 
 let config = defaultConfig;
-let datalayer = Datalayer.rpc(config);
+let datalayer = new Datalayer(config);
 changeListChunker.configure(config);
 
 function configure(newConfig) {
   config = { ...config, ...newConfig };
-  datalayer = Datalayer.rpc(config);
+  datalayer = new Datalayer(config);
   changeListChunker.configure(config);
 }
 
