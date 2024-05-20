@@ -53,7 +53,7 @@ const generateChange = async (storeId, action, key, value) => {
   }
 };
 
-const generateUpsertChange = async (existingKeys, key) => {
+const generateUpsertChange = async (key, value) => {
   const change = [];
 
   console.log(`Upsert: Key ${decodeHex(key)}`);
