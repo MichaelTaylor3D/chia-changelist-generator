@@ -38,8 +38,8 @@ const generateChange = async (storeId, action, key, value) => {
   }
 
   // Update doesnt require knowledge of existing keys
-  if (action === "update") {
-    return generateUpdateChange(key, value);
+  if (action === "upsert") {
+    return generateUpsertChange(key, value);
   }
 
   const existingKeys = await datalayer.getKeys({ id: storeId });
@@ -53,13 +53,13 @@ const generateChange = async (storeId, action, key, value) => {
   }
 };
 
-const generateUpdateChange = async (existingKeys, key) => {
+const generateUpsertChange = async (existingKeys, key) => {
   const change = [];
 
   console.log(`Upsert: Key ${decodeHex(key)}`);
 
   change.push({
-    action: "update",
+    action: "upsert",
     key: key,
     value: value,
   });
