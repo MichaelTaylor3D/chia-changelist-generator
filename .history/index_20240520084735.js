@@ -37,7 +37,6 @@ const generateChange = async (storeId, action, key, value) => {
     throw new Error(`Value for ${key} is not a valid hexadecimal string`);
   }
 
-  // Update doesnt require knowledge of existing keys
   if (action === "update") {
     return generateUpdateChange(key, value);
   }

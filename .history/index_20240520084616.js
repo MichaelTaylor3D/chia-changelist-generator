@@ -37,17 +37,13 @@ const generateChange = async (storeId, action, key, value) => {
     throw new Error(`Value for ${key} is not a valid hexadecimal string`);
   }
 
-  // Update doesnt require knowledge of existing keys
-  if (action === "update") {
-    return generateUpdateChange(key, value);
-  }
-
   const existingKeys = await datalayer.getKeys({ id: storeId });
 
   if (action === "insert") {
     return generateInsertChange(existingKeys?.keys || [], key, value);
   } else if (action === "delete") {
     return generateDeleteChange(existingKeys?.keys || [], key);
+  } else if (action === "update") {
   } else {
     throw new Error(`Action ${action} is not supported`);
   }
@@ -55,6 +51,8 @@ const generateChange = async (storeId, action, key, value) => {
 
 const generateUpdateChange = async (existingKeys, key) => {
   const change = [];
+
+  const hexKey = key.startsWith("0x") ? key : "0x" + key;
 
   console.log(`Upsert: Key ${decodeHex(key)}`);
 

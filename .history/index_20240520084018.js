@@ -20,7 +20,7 @@ const decodeHex = (str = "") => {
   return Buffer.from(str.replace("0x", ""), "hex").toString("utf8");
 };
 
-const isValidHexadecimal = (value) => {
+const isValidHexadecimal = (value) => {  
   if (value?.startsWith("0x")) {
     value = value.slice(2);
   }
@@ -33,13 +33,10 @@ const generateChange = async (storeId, action, key, value) => {
     throw new Error(`Key ${key} is not a valid hexadecimal string`);
   }
 
-  if (action == "insert" && !isValidHexadecimal(value)) {
-    throw new Error(`Value for ${key} is not a valid hexadecimal string`);
-  }
-
-  // Update doesnt require knowledge of existing keys
-  if (action === "update") {
-    return generateUpdateChange(key, value);
+  if (action == 'insert' && !isValidHexadecimal(value)) {
+    throw new Error(
+      `Value for ${key} is not a valid hexadecimal string`
+    );
   }
 
   const existingKeys = await datalayer.getKeys({ id: storeId });
@@ -51,20 +48,6 @@ const generateChange = async (storeId, action, key, value) => {
   } else {
     throw new Error(`Action ${action} is not supported`);
   }
-};
-
-const generateUpdateChange = async (existingKeys, key) => {
-  const change = [];
-
-  console.log(`Upsert: Key ${decodeHex(key)}`);
-
-  change.push({
-    action: "update",
-    key: key,
-    value: value,
-  });
-
-  return change;
 };
 
 const generateInsertChange = (existingKeys, key, value) => {
